@@ -6,7 +6,7 @@
 /*   By: mjorge <mjorge@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 15:10:16 by matthewjorg       #+#    #+#             */
-/*   Updated: 2024/11/08 14:31:03 by mjorge           ###   ########.fr       */
+/*   Updated: 2024/11/11 22:03:13 by mjorge           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,18 +27,16 @@ static ssize_t	read(int fd, void *buf, size_t count)
 
 char	*get_next_line(int fd)
 {
-	static int	count;
-	static char	*line;
+	static char	line[BUFFER_SIZE + 1];
+	int			count;
+	char		*return_line;
 
-	line = NULL;
-	line = (char *)malloc(BUFFER_SIZE = 1);
+	return_line = (char *)malloc(BUFFER_SIZE + 1);
 	if (!line)
 		return (NULL);
 	read(fd, line, BUFFER_SIZE);
-	count += BUFFER_SIZE;
-	if (check_newline(line))
+	count += BUFFER_SIZE if (check_newline(return_line))
 	{
-		return (line);
-		free(line);
+		return (return_line);
 	}
 }
