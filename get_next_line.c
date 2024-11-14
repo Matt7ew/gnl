@@ -6,7 +6,7 @@
 /*   By: mjorge <mjorge@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 15:10:16 by matthewjorg       #+#    #+#             */
-/*   Updated: 2024/11/11 22:03:13 by mjorge           ###   ########.fr       */
+/*   Updated: 2024/11/14 14:00:24 by mjorge           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,8 +34,8 @@ char	*get_next_line(int fd)
 	return_line = (char *)malloc(BUFFER_SIZE + 1);
 	if (!line)
 		return (NULL);
-	read(fd, line, BUFFER_SIZE);
-	count += BUFFER_SIZE if (check_newline(return_line))
+	read(fd, return_line, BUFFER_SIZE + 1);
+	if (check_newline(return_line))
 	{
 		return (return_line);
 	}
