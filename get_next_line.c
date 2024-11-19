@@ -6,37 +6,61 @@
 /*   By: mjorge <mjorge@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 15:10:16 by matthewjorg       #+#    #+#             */
-/*   Updated: 2024/11/14 14:00:24 by mjorge           ###   ########.fr       */
+/*   Updated: 2024/11/19 14:42:09 by mjorge           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-/// @brief Reads data from a file descriptor.
-/// @param fd The file descriptor to read from.
-/// @param buf The buffer to store the read data.
-/// @param count The number of bytes to read.
-/// @return The number of bytes read on success, or -1 on error.
-static ssize_t	read(int fd, void *buf, size_t count)
+int	ft_check(char *line)
 {
-	ssize_t	ret;
+	size_t	x;
 
-	ret = read(fd, buf, count);
-	return (ret);
+	x = 0;
+	while (line[x] != '\0')
+	{
+		if (line[x] == '\n')
+			return (true);
+		x++;
+	}
+	return (false);
 }
 
 char	*get_next_line(int fd)
 {
-	static char	line[BUFFER_SIZE + 1];
-	int			count;
-	char		*return_line;
+	static char	carry[BUFFER_SIZE + 1];
+	char		*line;
 
-	return_line = (char *)malloc(BUFFER_SIZE + 1);
+	if (BUFFER_SIZE <= 0 || fd < 0 || read(fd, carry, 0) == -1 || fd > 1024)
+		return (ft_memcpy(carry, "\0", 1), NULL);
+	line = ft_strdup(carry);
 	if (!line)
 		return (NULL);
-	read(fd, return_line, BUFFER_SIZE + 1);
-	if (check_newline(return_line))
+	line = ft_extranl(fd, line, carry);
+	if (!line)
+		return (NULL);
+	if (ft_check(line))
 	{
-		return (return_line);
 	}
+}
+
+char	*ft_extranl(int fd, char *line, char *carry)
+{
+	ssize_t	bytes;
+	char	*temp;
+
+	while (ft_check(line) == false && (bytes = read(fd, carry, BUFFER_SIZE
+				+ 1)))
+	{
+		if (bytes == -1)
+			return (free(line), NULL);
+		carry[bytes] = '\0';
+		temp = ft_strjoin(line, carry);
+		free(line);
+		line = ft_strdup(temp);
+		free(temp);
+		if (!line)
+			return (NULL);
+	}
+	return (line);
 }

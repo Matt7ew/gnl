@@ -6,15 +6,25 @@
 /*   By: mjorge <mjorge@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 15:10:19 by matthewjorg       #+#    #+#             */
-/*   Updated: 2024/11/08 14:31:31 by mjorge           ###   ########.fr       */
+/*   Updated: 2024/11/17 23:52:43 by mjorge           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef GET_NEXT_LINE_H
 # define GET_NEXT_LINE_H
-# include <unistd.h>
+# include <stdio.h>
+
+# ifndef BUFFER_SIZE
+#  define BUFFER_SIZE 32
+# endif
+
+# define true 1
+# define false 0
 
 char	*get_next_line(int fd);
-int		check_newline(char *line);
+char	*ft_strdup(const char *s1);
+char	*ft_strjoin(char const *s1, char const *s2);
+int		ft_check(char *line);
+char	*get_next_line(int fd);
 
 #endif
