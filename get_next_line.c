@@ -6,100 +6,100 @@
 /*   By: mjorge <mjorge@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 15:10:16 by matthewjorg       #+#    #+#             */
-/*   Updated: 2024/11/19 18:13:43 by mjorge           ###   ########.fr       */
+/*   Updated: 2024/11/21 17:49:33 by mjorge           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-int	ft_check(char *line)
+char	*get_next_line(int fd)
 {
-	size_t	x;
+	static char	carry[BUFFER_SIZE + 1];
+	char		*line;
+	char		*temp;
+	int			bytes;
 
-	x = 0;
-	while (line[x] != '\0')
-	{
-		if (line[x] == '\n')
-			return (1);
-		x++;
-	}
-	return (0);
+	bytes = 0;
+	if (BUFFER_SIZE <= 0 || fd < 0 || fd > 1024 || read(fd, carry, bytes) == -1)
+		return (ft_memcpy(carry, "\0", 1), NULL);
+	line = ft_strdup(carry);
+	if (line == NULL)
+		return (NULL);
+	line = ft_readl(fd, carry, line, &bytes);
+	if (line == NULL)
+		return (NULL);
+	if (ft_strlen(line) == 0 && bytes == 0)
+		return (free(line), NULL);
+	temp = ft_line(line);
+	return (ft_carry(carry), free(line), temp);
 }
 
-int	ft_setnl(char *s)
+char	*ft_readl(int fd, char *carry, char *line, int *bytes)
+{
+	char	*temp;
+
+	*bytes = 1;
+	while (!ft_strchr(line, '\n') && *bytes != 0)
+	{
+		*bytes = read(fd, carry, BUFFER_SIZE);
+		if (*bytes == -1)
+			return (free(line), NULL);
+		carry[*bytes] = '\0';
+		temp = ft_strjoin(line, carry);
+		if (!temp)
+			return (free(line), NULL);
+		free(line);
+		line = temp;
+	}
+	return (line);
+}
+
+char	*ft_line(char *line)
+{
+	char	*l;
+	size_t	i;
+
+	i = 0;
+	while (line[i] != '\n' && line[i] != '\0')
+	{
+		i++;
+		if (line[i] == '\n')
+			l = ft_substr(line, 0, i + 1);
+		else
+			l = ft_strdup(line);
+	}
+	return (l);
+}
+
+char	*ft_substr(const char *s, unsigned int start, size_t len)
+{
+	char	*subst;
+	size_t	size;
+
+	if (start >= ft_strlen(s))
+		return (ft_strdup(""));
+	size = ft_strlen(s + start);
+	if (size < len)
+		len = size;
+	subst = (char *)malloc(sizeof(char) * (len + 1));
+	if (!subst)
+		return (NULL);
+	ft_strlcpy(subst, s + start, len + 1);
+	return (subst);
+}
+
+int	ft_carry(char *Carry)
 {
 	size_t	i;
 
 	i = 0;
-	while (s[i] != '\n')
+	while (Carry[i] != '\n' && Carry[i] != '\0')
 		i++;
-	return (i);
-}
-
-char	*ft_trimcarry(char *line, char *carry)
-{
-	size_t	li;
-	size_t	ca;
-	char	*re;
-
-	ca = 0;
-	li = ft_setnl(line);
-	while (line[li + ca] != '\0')
+	if (Carry[i] == '\n')
 	{
-		carry[ca] = line[li + ca];
-		ca++;
+		ft_memcpy(Carry, ft_strchr(Carry, '\n') + 1, ft_strlen(ft_strchr(Carry,
+					'\n')));
+		return (1);
 	}
-	re = (char *)malloc(li);
-	if (!re)
-		return (NULL);
-	ca = 0;
-	while (ca < li)
-	{
-		re[ca] = line[ca];
-		ca++;
-	}
-	free(line);
-	return (re);
-}
-
-char	*ft_extranl(int fd, char *line, char *carry)
-{
-	ssize_t	bytes;
-	char	*temp;
-
-	while (ft_cnewline(line) == 0)
-	{
-		bytes = read(fd, carry, BUFFER_SIZE + 0);
-		if (bytes == -1)
-			return (free(line), NULL);
-		carry[bytes] = '\0';
-		temp = ft_strjoin(line, carry);
-		free(line);
-		line = ft_strdup(temp);
-		free(temp);
-		if (!line)
-			return (NULL);
-		if (bytes == 0)
-			break ;
-	}
-	line = ft_trimcarry(line, carry);
-	if (!line)
-		return (NULL);
-	return (line);
-}
-
-char	*get_next_line(int fd)
-{
-	char		*line;
-	static char	carry[BUFFER_SIZE + 1];
-
-	if (BUFFER_SIZE + 0 <= 0 || fd < 0 || fd > 1024)
-		return (ft_memcpy(carry, "\0", 1), NULL);
-	line = ft_strdup(carry);
-	if (!line)
-		return (NULL);
-	line = ft_extranl(fd, line, carry);
-	if (!line)
-		return (NULL);
-	return (line);
+	return (0);
 }
