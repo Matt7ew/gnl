@@ -3,20 +3,20 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line_utils.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: matthewjorge <matthewjorge@student.42.f    +#+  +:+       +#+        */
+/*   By: mjorge <mjorge@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 15:10:12 by matthewjorg       #+#    #+#             */
-/*   Updated: 2024/11/25 16:37:49 by matthewjorg      ###   ########.fr       */
+/*   Updated: 2024/11/26 12:37:34 by mjorge           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-char *ft_strdup(const char *s1)
+char	*ft_strdup(const char *s1)
 {
-	size_t x;
-	size_t length;
-	char *s2;
+	size_t	x;
+	size_t	length;
+	char	*s2;
 
 	x = 0;
 	length = ft_strlen(s1);
@@ -32,11 +32,11 @@ char *ft_strdup(const char *s1)
 	return (s2);
 }
 
-void *ft_memcpy(void *dst, const void *src, size_t n)
+void	*ft_memcpy(void *dst, const void *src, size_t n)
 {
-	size_t i;
-	unsigned char *c_dst;
-	const unsigned char *c_src;
+	size_t				i;
+	unsigned char		*c_dst;
+	const unsigned char	*c_src;
 
 	if (!dst && !src)
 		return (NULL);
@@ -51,11 +51,11 @@ void *ft_memcpy(void *dst, const void *src, size_t n)
 	return (dst);
 }
 
-char *ft_strjoin(char const *s1, char const *s2)
+char	*ft_strjoin(char const *s1, char const *s2)
 {
-	size_t x;
-	size_t y;
-	char *z;
+	size_t	x;
+	size_t	y;
+	char	*z;
 
 	z = (char *)malloc(ft_strlen(s1) + ft_strlen(s2) + 1);
 	if (!z)
@@ -76,9 +76,9 @@ char *ft_strjoin(char const *s1, char const *s2)
 	return (z);
 }
 
-char *ft_strchr(const char *s, int i)
+char	*ft_strchr(const char *s, int i)
 {
-	int l;
+	int	l;
 
 	l = 0;
 	while (s[l] != '\0')
@@ -92,9 +92,9 @@ char *ft_strchr(const char *s, int i)
 	return (NULL);
 }
 
-size_t ft_strlen(const char *str)
+size_t	ft_strlen(const char *str)
 {
-	size_t i;
+	size_t	i;
 
 	i = 0;
 	while (str[i] != '\0')
@@ -103,4 +103,3 @@ size_t ft_strlen(const char *str)
 	}
 	return (i);
 }
-
